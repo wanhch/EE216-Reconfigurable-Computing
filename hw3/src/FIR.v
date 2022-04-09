@@ -30,32 +30,26 @@ module FIR (
     reg [7:0] tmp15;
     reg [15:0] buffer_1_1;
     reg [15:0] buffer_2_1;
-    reg [15:0] buffer_2_2;
     reg [15:0] buffer_3_1;
     reg [15:0] buffer_3_2;
-    reg [15:0] buffer_3_3;
     reg [15:0] buffer_4_1;
     reg [15:0] buffer_4_2;
     reg [15:0] buffer_4_3;
-    reg [15:0] buffer_4_4;
     reg [15:0] buffer_5_1;
     reg [15:0] buffer_5_2;
     reg [15:0] buffer_5_3;
     reg [15:0] buffer_5_4;
-    reg [15:0] buffer_5_5;
     reg [15:0] buffer_6_1;
     reg [15:0] buffer_6_2;
     reg [15:0] buffer_6_3;
     reg [15:0] buffer_6_4;
     reg [15:0] buffer_6_5;
-    reg [15:0] buffer_6_6;
     reg [15:0] buffer_7_1;
     reg [15:0] buffer_7_2;
     reg [15:0] buffer_7_3;
     reg [15:0] buffer_7_4;
     reg [15:0] buffer_7_5;
     reg [15:0] buffer_7_6;
-    reg [15:0] buffer_7_7;
     reg [15:0] buffer_8_1;
     reg [15:0] buffer_8_2;
     reg [15:0] buffer_8_3;
@@ -63,13 +57,6 @@ module FIR (
     reg [15:0] buffer_8_5;
     reg [15:0] buffer_8_6;
     reg [15:0] buffer_8_7;
-    reg [15:0] buffer_8_8;
-    reg [15:0] buffer_2to3;
-    reg [15:0] buffer_3to4;
-    reg [15:0] buffer_4to5;
-    reg [15:0] buffer_5to6;
-    reg [15:0] buffer_6to7;
-    reg [15:0] buffer_7to8;
 
     wire [7:0] input1_sig;
     wire [7:0] input2_sig;
@@ -87,22 +74,14 @@ module FIR (
     wire [7:0] input14_sig;
     wire [7:0] input15_sig;
     wire [7:0] input16_sig;
-    wire [15:0] A1_sig;
-    wire [15:0] A2_sig;
-    wire [15:0] A3_sig;
-    wire [15:0] A4_sig;
-    wire [15:0] A5_sig;
-    wire [15:0] A6_sig;
-    wire [15:0] A7_sig;
-    wire [15:0] A8_sig;
-    wire [15:0] M1_sig;
-    wire [15:0] M2_sig;
-    wire [15:0] M3_sig;
-    wire [15:0] M4_sig;
-    wire [15:0] M5_sig;
-    wire [15:0] M6_sig;
-    wire [15:0] M7_sig;
-    wire [15:0] M8_sig;
+    wire signed [15:0] A1_sig;
+    wire signed [15:0] A2_sig;
+    wire signed [15:0] A3_sig;
+    wire signed [15:0] A4_sig;
+    wire signed [15:0] A5_sig;
+    wire signed [15:0] A6_sig;
+    wire signed [15:0] A7_sig;
+    wire signed [15:0] A8_sig;
 
     wire [15:0] buffered_M1_sig;
     wire [15:0] buffered_M2_sig;
@@ -119,12 +98,6 @@ module FIR (
     wire [15:0] CA_5_sig;
     wire [15:0] CA_6_sig;
     wire [15:0] CA_7_sig;
-    wire [15:0] CA_2_buffered_sig;
-    wire [15:0] CA_3_buffered_sig;
-    wire [15:0] CA_4_buffered_sig;
-    wire [15:0] CA_5_buffered_sig;
-    wire [15:0] CA_6_buffered_sig;
-    wire [15:0] CA_7_buffered_sig;
 
     assign input1_sig = din;
     assign input2_sig = tmp1;
@@ -143,14 +116,14 @@ module FIR (
     assign input15_sig = tmp14;
     assign input16_sig = tmp15;
 
-    MultiCycleAdder MA_1(input1_sig, input16_sig, 0, clk, rst, A1_sig);
-    MultiCycleAdder MA_2(input2_sig, input15_sig, 0, clk, rst, A2_sig);
-    MultiCycleAdder MA_3(input3_sig, input14_sig, 0, clk, rst, A3_sig);
-    MultiCycleAdder MA_4(input4_sig, input13_sig, 0, clk, rst, A4_sig);
-    MultiCycleAdder MA_5(input5_sig, input12_sig, 0, clk, rst, A5_sig);
-    MultiCycleAdder MA_6(input6_sig, input11_sig, 0, clk, rst, A6_sig);
-    MultiCycleAdder MA_7(input7_sig, input10_sig, 0, clk, rst, A7_sig);
-    MultiCycleAdder MA_8(input8_sig, input9_sig, 0, clk, rst, A8_sig);
+    MultiCycleAdder MA_1({8'd0, input1_sig}, {8'd0, input16_sig}, 0, clk, rst, A1_sig);
+    MultiCycleAdder MA_2({8'd0, input2_sig}, {8'd0, input15_sig}, 0, clk, rst, A2_sig);
+    MultiCycleAdder MA_3({8'd0, input3_sig}, {8'd0, input14_sig}, 0, clk, rst, A3_sig);
+    MultiCycleAdder MA_4({8'd0, input4_sig}, {8'd0, input13_sig}, 0, clk, rst, A4_sig);
+    MultiCycleAdder MA_5({8'd0, input5_sig}, {8'd0, input12_sig}, 0, clk, rst, A5_sig);
+    MultiCycleAdder MA_6({8'd0, input6_sig}, {8'd0, input11_sig}, 0, clk, rst, A6_sig);
+    MultiCycleAdder MA_7({8'd0, input7_sig}, {8'd0, input10_sig}, 0, clk, rst, A7_sig);
+    MultiCycleAdder MA_8({8'd0, input8_sig}, {8'd0, input9_sig}, 0, clk, rst, A8_sig);
 
     assign buffered_M1_sig = buffer_1_1;
     assign buffered_M2_sig = buffer_2_1;
@@ -161,22 +134,17 @@ module FIR (
     assign buffered_M7_sig = buffer_7_6;
     assign buffered_M8_sig = buffer_8_7;
 
-    assign CA_2_buffered_sig = buffer_2to3;
-    assign CA_3_buffered_sig = buffer_3to4;
-    assign CA_4_buffered_sig = buffer_4to5;
-    assign CA_5_buffered_sig = buffer_5to6;
-    assign CA_6_buffered_sig = buffer_6to7;
-    assign CA_7_buffered_sig = buffer_7to8;
-
     MultiCycleAdder CA_2(buffered_M1_sig, buffered_M2_sig, 0, clk, rst, CA_2_sig);
-    MultiCycleAdder CA_3(CA_2_buffered_sig, buffered_M3_sig, 0, clk, rst, CA_3_sig);
-    MultiCycleAdder CA_4(CA_3_buffered_sig, buffered_M4_sig, 0, clk, rst, CA_4_sig);
-    MultiCycleAdder CA_5(CA_4_buffered_sig, buffered_M5_sig, 0, clk, rst, CA_5_sig);
-    MultiCycleAdder CA_6(CA_5_buffered_sig, buffered_M6_sig, 0, clk, rst, CA_6_sig);
-    MultiCycleAdder CA_7(CA_6_buffered_sig, buffered_M7_sig, 0, clk, rst, CA_7_sig);
-    MultiCycleAdder CA_8(CA_7_buffered_sig, buffered_M8_sig, 0, clk, rst, dout);
+    MultiCycleAdder CA_3(CA_2_sig, buffered_M3_sig, 0, clk, rst, CA_3_sig);
+    MultiCycleAdder CA_4(CA_3_sig, buffered_M4_sig, 0, clk, rst, CA_4_sig);
+    MultiCycleAdder CA_5(CA_4_sig, buffered_M5_sig, 0, clk, rst, CA_5_sig);
+    MultiCycleAdder CA_6(CA_5_sig, buffered_M6_sig, 0, clk, rst, CA_6_sig);
+    MultiCycleAdder CA_7(CA_6_sig, buffered_M7_sig, 0, clk, rst, CA_7_sig);
+    MultiCycleAdder CA_8(CA_7_sig, buffered_M8_sig, 0, clk, rst, dout[15:0]);
 
-    always @(posedge clk, posedge rst) begin
+    assign dout[16] = dout[15];
+
+    always @(posedge clk, negedge rst) begin
         if (rst == 1'b0) begin
             tmp1 <= 8'd0;
             tmp2 <= 8'd0;
@@ -202,41 +170,27 @@ module FIR (
             buffer_6_1 <= 16'd0;
             buffer_7_1 <= 16'd0;
             buffer_8_1 <= 16'd0;
-            buffer_2_2 <= 16'd0;
             buffer_3_2 <= 16'd0;
             buffer_4_2 <= 16'd0;
             buffer_5_2 <= 16'd0;
             buffer_6_2 <= 16'd0;
             buffer_7_2 <= 16'd0;
             buffer_8_2 <= 16'd0;
-            buffer_3_3 <= 16'd0;
             buffer_4_3 <= 16'd0;
             buffer_5_3 <= 16'd0;
             buffer_6_3 <= 16'd0;
             buffer_7_3 <= 16'd0;
             buffer_8_3 <= 16'd0;
-            buffer_4_4 <= 16'd0;
             buffer_5_4 <= 16'd0;
             buffer_6_4 <= 16'd0;
             buffer_7_4 <= 16'd0;
             buffer_8_4 <= 16'd0;
-            buffer_5_5 <= 16'd0;
             buffer_6_5 <= 16'd0;
             buffer_7_5 <= 16'd0;
             buffer_8_5 <= 16'd0;
-            buffer_6_6 <= 16'd0;
             buffer_7_6 <= 16'd0;
             buffer_8_6 <= 16'd0;
-            buffer_7_7 <= 16'd0;
             buffer_8_7 <= 16'd0;
-            buffer_8_8 <= 16'd0;
-
-            buffer_2to3 <= 16'd0;
-            buffer_3to4 <= 16'd0;
-            buffer_4to5 <= 16'd0;
-            buffer_5to6 <= 16'd0;
-            buffer_6to7 <= 16'd0;
-            buffer_7to8 <= 16'd0;
         end else begin
             tmp1 <= din;
             tmp2 <= tmp1;
@@ -262,41 +216,27 @@ module FIR (
             buffer_6_1 <= A6_sig * h5;
             buffer_7_1 <= A7_sig * h6;
             buffer_8_1 <= A8_sig * h7;
-            buffer_2_2 <= buffer_2_1;
             buffer_3_2 <= buffer_3_1;
             buffer_4_2 <= buffer_4_1;
             buffer_5_2 <= buffer_5_1;
             buffer_6_2 <= buffer_6_1;
             buffer_7_2 <= buffer_7_1;
             buffer_8_2 <= buffer_8_1;
-            buffer_3_3 <= buffer_3_2;
             buffer_4_3 <= buffer_4_2;
             buffer_5_3 <= buffer_5_2;
             buffer_6_3 <= buffer_6_2;
             buffer_7_3 <= buffer_7_2;
             buffer_8_3 <= buffer_8_2;
-            buffer_4_4 <= buffer_4_3;
             buffer_5_4 <= buffer_5_3;
             buffer_6_4 <= buffer_6_3;
             buffer_7_4 <= buffer_7_3;
             buffer_8_4 <= buffer_8_3;
-            buffer_5_5 <= buffer_5_4;
             buffer_6_5 <= buffer_6_4;
             buffer_7_5 <= buffer_7_4;
             buffer_8_5 <= buffer_8_4;
-            buffer_6_6 <= buffer_6_5;
             buffer_7_6 <= buffer_7_5;
             buffer_8_6 <= buffer_8_5;
-            buffer_7_7 <= buffer_7_6;
             buffer_8_7 <= buffer_8_6;
-            buffer_8_8 <= buffer_8_7;
-
-            buffer_2to3 <= CA_2_sig;
-            buffer_3to4 <= CA_3_sig;
-            buffer_4to5 <= CA_4_sig;
-            buffer_5to6 <= CA_5_sig;
-            buffer_6to7 <= CA_6_sig;
-            buffer_7to8 <= CA_7_sig;
         end
     end
 endmodule
